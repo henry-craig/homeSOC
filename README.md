@@ -57,7 +57,7 @@ See [`/attacks/1-ssh-bruteforce`](./attacks/1-ssh-bruteforce) for the full comma
 ## Repository Structure
 ```
 /attacks/1-ssh-bruteforce/  -> Attack command, detection query, notes, screenshots
-README.md                    -> This file
+README.md                   -> This file
 ```
 
 
