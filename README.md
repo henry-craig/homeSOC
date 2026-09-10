@@ -24,6 +24,16 @@ A self-built home lab designed to simulate real-world attacks and detect them us
 - **Splunk Enterprise**: SIEM used to ingest logs and run detection searches
 - All VMs run in VMware Workstation Pro on an isolated internal network, separate from the home network
 
+## Lab Environment
+
+| Machine | Role | OS | IP Address |
+|---|---|---|---|
+| Kali | Attacker | Kali Linux | 192.168.241.131 |
+| Target | Victim | Ubuntu26 Desktop | 192.168.241.130 |
+| Host | SIEM (Splunk) | Windows | 192.168.241.1 |
+
+All machines run on an isolated VMware host-only network (VMnet1), separate from the home network.
+
 ## Tools Used
 - VMware Workstation Pro
 - Kali Linux
@@ -35,3 +45,21 @@ A self-built home lab designed to simulate real-world attacks and detect them us
 
 | # | Attack Simulated | Tool Used | Detection Method | Status |
 |---|---|---|---|---|
+| 1 | SSH Brute Force | Hydra | Splunk SPL timeline of failed/successful logins by source IP | ✅ Complete |
+
+## Detailed Write-ups
+
+### Attack 1: SSH Brute Force
+See [`/attacks/1-ssh-bruteforce`](./attacks/1-ssh-bruteforce) for the full command, detection query, and screenshots.
+
+**Summary:** Used Hydra to brute-force SSH on target. Detected the attack in Splunk via a timeline query showing failed logins followed by a successful one from the same source IP.
+
+## Repository Structure
+```
+/attacks/1-ssh-bruteforce/  -> Attack command, detection query, notes, screenshots
+README.md                    -> This file
+```
+
+
+## Author
+Henry Craig — [LinkedIn](https://www.linkedin.com/in/henry-craig/)
