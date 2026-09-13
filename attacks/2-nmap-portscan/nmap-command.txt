@@ -1,0 +1,5 @@
+# Port scan against Ubuntu target using Nmap's SYN scan technique
+# -sS : SYN scan (stealthier, doesn't complete the TCP handshake)
+# -oN : save output in normal (human-readable) format
+
+nmap -sS 192.168.241.130 -oN nmap-scan-output.txt

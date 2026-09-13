@@ -46,6 +46,7 @@ All machines run on an isolated VMware host-only network (VMnet1), separate from
 | # | Attack Simulated | Tool Used | Detection Method | Status |
 |---|---|---|---|---|
 | 1 | SSH Brute Force | Hydra | Splunk SPL timeline of failed/successful logins by source IP | ✅ Complete |
+| 2 | Port Scan | Nmap | Splunk SPL counting distinct destination ports per source IP from UFW block logs | ✅ Complete |
 
 ## Detailed Write-ups
 
@@ -54,9 +55,15 @@ See [`/attacks/1-ssh-bruteforce`](./attacks/1-ssh-bruteforce) for the full comma
 
 **Summary:** Used Hydra to brute-force SSH on target. Detected the attack in Splunk via a timeline query showing failed logins followed by a successful one from the same source IP.
 
+### Attack 2: Nmap Port Scan
+See [`/attacks/2-nmap-portscan`](./attacks/2-nmap-portscan) for the full command, detection query, and screenshots.
+
+**Summary:** Ran an Nmap SYN scan against target. UFW blocked all ports except SSH; detected the scan in Splunk by counting distinct destination ports touched by a single source IP, with the detection threshold calibrated to UFW's actual (rate-limited) logging volume.
+
 ## Repository Structure
 ```
 /attacks/1-ssh-bruteforce/  -> Attack command, detection query, notes, screenshots
+/attacks/2-nmap-portscan/   -> Nmap command/output, detection query, notes, screenshots
 README.md                   -> This file
 ```
 

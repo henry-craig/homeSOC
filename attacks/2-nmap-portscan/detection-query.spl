@@ -1,0 +1,9 @@
+# Nmap Port Scan Detection
+# Flags source IPs touching many distinct ports in a short window,
+# based on UFW's blocked-connection logs on Target.
+# Threshold calibrated to observed log volume.
+
+index=main host="target-VMware-Virtual-Platform" "UFW BLOCK"
+| rex field=_raw "SRC=(?<src_ip>\d+\.\d+\.\d+\.\d+).*DPT=(?<dest_port>\d+)"
+| stats dc(dest_port) as unique_ports by src_ip
+| where unique_ports > 5
