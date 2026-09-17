@@ -12,10 +12,10 @@ since its parallel tasks (`-t 4`) don't share success state. Adding
 ## Detection
 Forwarded target's auth.log to Splunk and built a timeline query
 (see `detection-query.spl`) showing failed logins followed by one
-success from the same source IP — a clear brute-force pattern.
+success from the same source IP, a clear brute-force pattern.
 
 ## What I learned
 - sshd cuts off connections after a few failed attempts, which shows
   up as its own detection signal in the logs.
-- Hydra's parallel tasks don't share state — use `-f` for a clean run.
+- Hydra's parallel tasks don't share state so use `-f` for a clean run.
 - Splunk's `rex` command is key for pulling fields out of raw logs.

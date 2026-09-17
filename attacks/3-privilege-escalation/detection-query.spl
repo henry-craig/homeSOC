@@ -1,0 +1,11 @@
+# Privilege Escalation Detection (auditd)
+# Flags any session where the original logged-in user (AUID) is not
+# root, but the session's effective UID becomes root, the audit
+# trail signature of privilege escalation regardless of the method used.
+
+index=main host="target-VMware-Virtual-Platform" "acct=\"root\""
+| rex field=_raw "AUID=\"(?<original_user>\w+)\""
+| rex field=_raw "UID=\"(?<current_uid>\w+)\""
+| where original_user!="root" AND current_uid="root"
+| table _time, original_user, current_uid, _raw
+| sort _time

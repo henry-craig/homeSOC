@@ -4,7 +4,7 @@ Home lab simulating and detecting attacks using Splunk SIEM
 ## Overview
 A self-built home lab designed to simulate real-world attacks and detect them using a Splunk SIEM. This project was built to gain hands-on experience with the full detection pipeline — from generating attack traffic, to log collection, to writing detection logic — the same core workflow used by SOC analysts.
 
-**Status:** In progress (started Fall 2026)
+**Status:** Phase 1 Complete (Fall 2026) — Phase 2 (cloud security) planned
 
 ## Goals
 - Simulate common attack techniques in a safe, isolated environment
@@ -37,7 +37,7 @@ All machines run on an isolated VMware host-only network (VMnet1), separate from
 ## Tools Used
 - VMware Workstation Pro
 - Kali Linux
-- Ubuntu Server
+- Ubuntu Desktop
 - Splunk Enterprise (Free license)
 - Splunk Universal Forwarder
 
@@ -45,28 +45,39 @@ All machines run on an isolated VMware host-only network (VMnet1), separate from
 
 | # | Attack Simulated | Tool Used | Detection Method | Status |
 |---|---|---|---|---|
-| 1 | SSH Brute Force | Hydra | Splunk SPL timeline of failed/successful logins by source IP | ✅ Complete |
-| 2 | Port Scan | Nmap | Splunk SPL counting distinct destination ports per source IP from UFW block logs | ✅ Complete |
+| 1 | Port Scan | Nmap | Splunk SPL counting distinct destination ports per source IP from UFW block logs | ✅ Complete |
+| 2 | SSH Brute Force | Hydra | Splunk SPL timeline of failed/successful logins by source IP | ✅ Complete |
+| 3 | Privilege Escalation | GTFOBins (find) | Splunk SPL detecting AUID/UID mismatch using auditd logs | ✅ Complete |
 
 ## Detailed Write-ups
 
-### Attack 1: SSH Brute Force
-See [`/attacks/1-ssh-bruteforce`](./attacks/1-ssh-bruteforce) for the full command, detection query, and screenshots.
+### Attack 1: Nmap Port Scan
+See [`/attacks/1-nmap-portscan`](./attacks/1-nmap-portscan) for the full command, detection query, and screenshots.
 
-**Summary:** Used Hydra to brute-force SSH on target. Detected the attack in Splunk via a timeline query showing failed logins followed by a successful one from the same source IP.
+**Summary:** Ran an Nmap SYN scan against target. UFW blocked all ports except SSH, detected the scan in Splunk by counting distinct destination ports touched by a single source IP, with the detection threshold calibrated to UFW's actual (rate-limited) logging volume.
 
-### Attack 2: Nmap Port Scan
-See [`/attacks/2-nmap-portscan`](./attacks/2-nmap-portscan) for the full command, detection query, and screenshots.
 
-**Summary:** Ran an Nmap SYN scan against target. UFW blocked all ports except SSH; detected the scan in Splunk by counting distinct destination ports touched by a single source IP, with the detection threshold calibrated to UFW's actual (rate-limited) logging volume.
+### Attack 2: SSH Brute Force
+See [`/attacks/2-ssh-bruteforce`](./attacks/2-ssh-bruteforce) for the full command, detection query, and screenshots.
+
+**Summary:** Used Hydra to brute-force SSH on target. Detected the attack in Splunk through a timeline query showing failed logins followed by a successful one from the same source IP.
+
+### Attack 3: Privilege Escalation
+See [`/attacks/3-privilege-escalation`](./attacks/3-privilege-escalation) for the full command, detection query, and screenshots.
+
+**Summary:** Exploited a misconfigured sudoers rule granting passwordless access to `find` to escalate from a low-privilege user to root. Detected the escalation in Splunk using auditd logs showing a mismatch between the original login user (AUID) and the elevated effective UID.
 
 ## Repository Structure
 ```
-/attacks/1-ssh-bruteforce/  -> Attack command, detection query, notes, screenshots
-/attacks/2-nmap-portscan/   -> Nmap command/output, detection query, notes, screenshots
-README.md                   -> This file
+/attacks/1-nmap-portscan/         -> Nmap command/output, detection query, notes, screenshots
+/attacks/2-ssh-bruteforce/        -> Attack command, detection query, notes, screenshots
+/attacks/3-privilege-escalation/  -> Exploit command, detection query, notes, screenshots
+README.md                         -> This file
 ```
 
+## Future Improvements
+- Phase 2: Extend this project into a cloud security exercise (AWS CloudTrail/GuardDuty misconfiguration detection), to demonstrate detection engineering in a cloud environment alongside this on-prem lab
+- Re-run the privilege escalation scenario using the same account compromised in the brute-force attack to demonstrate a fully continuous attack chain rather than isolated scenarios
 
 ## Author
 Henry Craig — [LinkedIn](https://www.linkedin.com/in/henry-craig/)

