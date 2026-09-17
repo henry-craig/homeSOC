@@ -77,6 +77,7 @@ README.md                         -> This file
 
 ## Future Improvements
 - Phase 2: Extend this project into a cloud security exercise (AWS CloudTrail/GuardDuty misconfiguration detection), to demonstrate detection engineering in a cloud environment alongside this on-prem lab
+- Add automated response to one or more detections, such as a script that blocks a malicious IP or disables a compromised account
 - Re-run the privilege escalation scenario using the same account compromised in the brute-force attack to demonstrate a fully continuous attack chain rather than isolated scenarios
 
 ## Author
